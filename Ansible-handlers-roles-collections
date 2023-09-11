@@ -1,0 +1,224 @@
+ANSIBLE HANDLERS, ROLES AND COLLECTIONS
+
+1. You've been tasked with automating the configuration of Juniper devices 
+in your network, to achieve this, you need to install the appropriate Ansible
+ Collection that provides Juniper-specific modules and roles.
+
+Which of the following commands would you use to install the Juniper-specific
+ collection for network automation?
+
+a. ansible-galaxy collection install network.juniper
+
+b. ansible-galaxy retrieve collection network.juniper
+
+c. ansible-galaxy collection get network.juniper
+
+d. ansible-galaxy get collection network.juniper
+
+Ans = ansible-galaxy collection install network.juniper
+
+2. You've installed the amazon.aws collection and now you need to create an EC2 instance using a playbook.
+
+Given the following playbook snippet, identify the missing line that correctly imports the amazon.aws collection.
+---
+- hosts: localhost
+  [MISSING LINE HERE]
+  tasks:
+    - name: Launch an EC2 instance
+      ec2_instance:
+        name: my-instance
+        region: us-west-1
+
+a. collections: [amazon.aws]
+
+b. collection: [amazon.aws]
+
+c. collections=[amazon.aws]
+
+d. collection=[amazon.aws]
+solutions
+collections: [amazon.aws] is the correct way to import the amazon.aws collection.
+
+3. You are given access to a lab environment with a machine (i.e student-node) that
+ has Ansible installed. On this machine, there's a /home/bob/playbooks/requirements.yml
+ file that lists several collections required for a project. Your task is to install all
+ the collections listed in the /home/bob/playbooks/requirements.yml file using the correct command.
+
+You can use the following command to install all collections listed in the requirements.yml file.
+
+cd playbooks/
+ansible-galaxy collection install -r requirements.yml
+
+4. You've been informed about a new Ansible Collection named networking_tools under the 
+namespace company_xyz. This collection contains specialized modules for network automation.
+ You need to write a playbook that installs this collection and then uses a custom module 
+named configure_vlan from it to set up VLAN 10 with the name Admin_VLAN.
+placeholders in this playbook.
+
+Please note that, you need not to run this playbook for testing, just make the required
+ changes to fill the placeholders correctly.
+
+Update the playbook /home/bob/playbooks/playbook.yml as below:
+
+---
+- hosts: localhost
+  tasks:
+    - name: Install the networking_tools collection
+      ansible.builtin.ansible_galaxy_collection:
+        name: company_xyz.networking_tools
+        source: https://galaxy.ansible.com
+
+- hosts: switches
+  collections:
+    - company_xyz.networking_tools
+  tasks:
+    - name: Configure VLAN 10
+      configure_vlan:
+        vlan_id: 10
+        vlan_name: Admin_VLAN
+
+5. Given the following sample Ansible playbook /update_web_server_config.yml
+- name: Update web server configuration
+  hosts: webservers
+  tasks:
+    - name: Copy web server configuration file
+      copy:
+        src: /path/to/webserver.conf
+        dest: /etc/webserver/webserver.conf
+      notify: Restart web server
+
+
+Which of the following handler implementations will correctly restart
+ the web server when the configuration file is changed?
+
+a.
+
+handlers:
+  - name: Restart web servers
+    service:
+      name: webserver
+      state: restarted
+
+
+
+b.
+
+handlers:
+  - name: Restart server
+    service:
+      name: webserver
+      state: restarted
+
+
+
+c.
+
+handlers:
+  - name: Restart
+    service:
+      name: webserver
+      state: restarted
+
+
+
+d.
+
+handlers:
+  - name: Restart web server
+    service:
+      name: webserver
+      state: restarted
+
+
+
+
+
+
+Complete the playbook located at /home/bob/playbooks/playbook.yml to correctly 
+install the networking_tools collection and utilize the configure_vlan module. 
+You just need to fill the 
+
+solution
+Following handler implementation will correctly restart the web server when the configuration file is changed.
+
+handlers:
+  - name: Restart web server
+    service:
+      name: webserver
+      state: restarted
+
+6. You are given access to a lab environment with a server (i.e student-node). 
+On this server, you have a playbook named /home/bob/ansible_lab/handler_test.yml.
+ This playbook contains multiple tasks that notify the same handler. Your task is to
+ run the playbook and answer below question.
+
+
+How many times will the handler be executed during the playbook run?
+
+a) Once for each notifying task.
+
+b) Only once, at the end of the playbook run.
+
+c) Once for each changed task.
+
+d) The handler will not be executed.
+
+
+7. You have a handler named Restart Network Service. Which of the following task implementations
+ correctly notifies this handler when the network configuration file is modified?
+
+
+a.
+
+- name: Update network configuration
+  copy:
+    src: /path/to/network.conf
+    dest: /etc/network/network.conf
+
+
+
+b.
+
+- name: Update network configuration
+  copy:
+    src: /path/to/network.conf
+    dest: /etc/network/network.conf
+  notify: Restart Network Service
+
+
+
+c.
+
+- name: Update network configuration
+  copy:
+    src: /path/to/network.conf
+    dest: /etc/network/network.conf
+  handler: Restart Network Service
+
+
+
+d.
+
+- name: Update network configuration
+  copy:
+    src: /path/to/network.conf
+    dest: /etc/network/network.conf
+  trigger: Restart Network Service
+
+solution
+Following task implementation correctly notifies this handler when the network configuration file is modified.
+
+- name: Update network configuration
+  copy:
+    src: /path/to/network.conf
+    dest: /etc/network/network.conf
+  notify: Restart Network Service
+
+
+
+
+
+
+
+
+
