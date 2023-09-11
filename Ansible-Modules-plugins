@@ -1,0 +1,196 @@
+NSIBLE MODULES AND PLUGINS
+1. Which of the following Ansible modules support free_form parameter?
+Ansible command module support free_form parameter.
+
+2. Does Ansible support idempotancy?
+Ans = Yes
+
+3. Which of the following commands we can use to see the information about Ansible modules from command line?
+Ans
+You can use ansible-doc command to see the information about Ansible modules from command line.
+
+4. Which Ansible module is used in the following playbook?
+ hosts: localhost
+  become: yes
+  become_user: root
+  tasks:
+    - name: create user
+      user:
+        name: admin
+
+`Ans 
+The playbook is using user module.
+
+
+5. Which of the following statements are true about lineinfile Ansible module?
+
+
+A. It only adds the given line in file if that line doesn't exist in that file.
+
+
+B. It adds the given line in file even if that line already exists in that file.
+
+
+C. It replaces all existing lines in the file with a new given line.
+
+
+D. It keeps the existing lines as well and add a new given line in the file.
+
+
+5. The following two statements are true about the lineinfile Ansible module.
+
+
+A. It only adds the given line in file if that line doesn't exist in that file.
+
+
+D. It keeps the existing lines as well and add a new given line in the file.
+
+6. What are Ansible system modules used for?
+A. System modules are basically used to create/update files and directories.
+
+
+B. System modules are actions to be performed at a system level such as modifying 
+the users and groups on a system, modifying iptables, starting/stopping the service etc.
+
+
+C. System modules are used to execute commands or scripts on a system.
+
+
+D. System modules are used to install and setup packages on a system.
+Ans
+System modules are actions to be performed at a system level such as modifying the users 
+and groups on a system, modifying iptables, starting/stopping the service etc.
+
+7. Your organization uses a proprietary cloud service that is not natively supported by Ansible. 
+You need to develop a custom Ansible module to interact with this cloud service's
+ API and provision resources.
+
+
+8. Which type of the Ansible plugins allows you to integrate with a cloud provider's API for
+ custom resource provisioning?
+Module Plugin allows you to integrate with a cloud provider's API for custom resource provisioning.
+
+9. You've developed a custom module named custom_cloud. To test this module in a playbook named 
+deploy.yml, which of the following task definitions is correct?
+
+ name: Provision custom cloud resource
+  custom_cloud:
+    param1: value1
+    param2: value2
+
+10. You are tasked with setting up an Ansible playbook that automates the deployment of
+ applications on AWS ec2 instances. Before running the playbook, you need to ensure that Ansible 
+has an up-to-date inventory of all ec2 instances in your AWS account.
+
+
+Which type of Ansible plugin would you use to fetch real-time information about your AWS ec2 instances?
+
+Ans = Dynamic Inventory Plugin will be used to fetch real-time information about your AWS ec2 instances. 
+
+11. You have a custom dynamic inventory script named aws_inventory.py. Which command would you
+ use to list all hosts in your AWS inventory using this script?
+solution
+
+We can use following command to list all hosts in our AWS inventory using this script.
+
+ansible-inventory --list -i aws_inventory.py
+
+a. ansible-inventory --list -i aws_inventory.py
+b. ansible-playbook --inventory aws_inventory.py
+c. ansible aws_inventory.py --list-hosts
+d. ansible-list --inventory aws_inventory.py
+
+12. You are tasked with finding a module in Ansible that helps manage Cisco devices. 
+Using the Modules & Plugins Index, which of the following modules is specifically designed 
+for managing Cisco IOS devices?
+solution 
+ cisco.ios module is specifically designed for managing Cisco IOS devices.
+
+13. Which of the following is not a key parameter available for cisco.ios module?
+solution
+ios_version is not a key parameter available for this module.
+
+14. Which of the following Ansible versions is cisco.ios module likely to be compatible with?
+
+Note: This can be a hypothetical answer; the actual version compatibility would need to be
+ checked in the Modules & Plugins Index.
+solution
+Ansible 2.8 Ansible version is likely to be compatible with cisco.ios module.
+
+15. You're planning to deploy an application on AWS and need to set up ec2 instances 
+using Ansible. Which module is primarily used for managing ec2 instances?
+solution
+ec2_instance module is primarily used for managing ec2 instances.
+
+16. Update the playbook /home/bob/playbooks/playbook.yaml to add a new task to start httpd
+ service on all web nodes defined in /home/bob/playbooks/inventory file.
+
+
+Use the service module.
+---
+- name: 'hosts'
+  hosts: all
+  become: yes
+  tasks:
+    - name: 'Execute a script'
+      script: '/tmp/install_script.sh'
+    - name: 'Start httpd service'
+      service:
+        name: 'httpd'
+        state: 'started'
+
+cd /home/bob/playbooks/
+ansible-playbook -i inventory playbook.yaml 
+
+
+
+    Cleanup.
+
+    Updated the "playbook.yaml" playbook to add a new task to start "httpd"
+ service on all web nodes defined in "inventory" file?
+
+    "playbook.yaml" playbook started the "httpd" service on "node01" host?
+
+    "playbook.yaml" playbook started the "httpd" service on "node02" host?
+
+17. Update the playbook /home/bob/playbooks/playbook.yaml to append the /var/www/html/index.html 
+file on all web nodes. The line needs to be added is Welcome to ansible-beginning course, create 
+the index.html file if doesn't exist.
+
+---
+- name: 'hosts'
+  hosts: all
+  become: yes
+  tasks:
+    - name: 'Execute a script'
+      script: '/tmp/install_script.sh'
+    - name: 'Start httpd service'
+      service:
+        name: 'httpd'
+        state: 'started'
+    - name: "Create or update index.html file."
+      lineinfile:
+        path: /var/www/html/index.html
+        line: "Welcome to ansible-beginning course"
+        create: true
+cd /home/bob/playbooks/
+ansible-playbook -i inventory playbook.yaml
+
+18. Update the playbook /home/bob/playbooks/playbook.yaml to add a new task to 
+create a new user called web_user.
+
+Use the user module for this task. You can find the user details as below.
+
+Username: web_user
+uid: 1040
+group: developers 
+
+
+
+
+
+
+
+
+
+
