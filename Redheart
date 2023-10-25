@@ -1,0 +1,161 @@
+tion management
+initially, there was only few servers and we could configure them manually, but nowadays, there are too many of them
+and we just can't do plus there is the risk of human errors. if we are to introduce some updates, we have to roll 
+back. if we have to keep track of all the updates that our system needs over time. we have developed in program in 
+which we can ssh into one server and we can automatically manage other servers also, and it is secure. this practice is 
+also called configuration management.
+
+Ansible playbook is a YAML formatted file that contains the desired state of our systems and the tasks needed to
+achieve that desired state.
+
+Ansible Inventory file: this file defines a group of target hosts upon which the task is to be executed. this allows
+you to target specific systems or group of systems for tasks to be accomplished.we write the addresses of all the 
+slave nodes. these are divided into static and dynamic inventory files. in static, the ip addresses do not change
+by in a cloud environment for example, you use dynamic inventory files and it is written in Python
+
+Modules: if you want to manage the various aspects of your system ranging from services, users, files,packages and
+more, you need to use modules. modules are the building blocks of ansible and are responsible for executing 
+tasks on target hosts.its like functions, the master node will write a set of tasks for each node to perform
+
+Roles: they encapsulate specific functionality making it possible to manage and share automation tasks. they help
+you organize and reuse Ansible playbooks.
+
+Ad-hoc-commands: for one-off tasks or quick systems checks. can be done on the CLI and are useful for gathering
+information or troubleshooting purposes.
+
+the configuration management is done using CICD: when we have the code in the repository its continuous integration
+but when we have to deploy from repository to production, we call it continuous deployment
+
+why Ansible: Ansible is agentless, in others you have to provide a software to manage the servers, second reason is
+that Python is used to build Ansible and python is a simple and easy language to use for all programmers.third point
+is that you use ssh which is passwordless and secure. setup is very easy compared to chef and puppet. you can push
+instructions from the master node to the slaves, this is the push-based architecture. In pull-based architecture, the 
+slaves have to ask every now and then perhaps every 10seconds whether the master has any work for them.
+
+HOW DOES ANSIBLE WORK
+it is a combination of three things, which are playbooks, modules and plugins. playbook contains lots of task.
+it is rich in plays, which go like this. first we have to install nginx, then we have to start it, then we have 
+to stop it, we have to do configuration changes.the combination of plays is called a playbook.plugins are modules
+which operate on the master node or main control machine, its basically used for logging purposes. Ansible vault
+is for storing and encrypting sensitive data.Ansible-vault encrypt, that is if you want to encrypt your Ansible
+file.
+
+Ansible Tower
+it has a graphical user interface for users and even those without extensive programming skills to use it to define
+lauch and monitor automation jobs and workflows. It keeps detailed logs of all job runs which makes it easy for 
+tracking changes and troubleshooting purposes. Centralized automation: it serves as a single source of control for 
+all of your automation tasks and workflows.it is a centralized hub for managing ansible automation across your organization
+it is the Manager's decision to use Ansible's tower.
+
+How do you copy multiple files a target host recursively: You can copy multiple files to a target host recursively in 
+Ansible using the copy module. To copy files recursively, you can specify the source directory as the source and the target
+ directory as the destination. Here's an example playbook to achieve this
+---
+- name: Copy files to target host recursively
+  hosts: your_target_host
+  tasks:
+    - name: Copy files
+      copy:
+        src: /path/to/source_directory
+        dest: /path/to/target_directory
+        recurse: yes
+
+How do you create an already encrypted file
+Create a New File:
+Start by creating a new plaintext file that contains the data you want to encrypt. You can use a text
+ editor or command-line tools to create this file. For example, create a file called my_secret.txt:
+
+plaintext
+
+This is a secret message.
+Only authorized users should see this.
+
+Encrypt the File:
+Now, you can use the ansible-vault command to encrypt this file. The ansible-vault command allows you to 
+set a password to encrypt the file. To encrypt the file, run the following command:
+
+bash
+
+ansible-vault encrypt my_secret.txt
+
+You'll be prompted to enter a password. Make sure to remember this password because you'll need it to 
+decrypt the file later. 
+Once encrypted, the file will be saved with the .vault extension, such as my_secret.txt.vault.
+
+Edit the Encrypted File (Optional):
+If you want to edit the contents of the encrypted file, you can use the ansible-vault edit command:
+
+bash
+
+    ansible-vault edit my_secret.txt
+
+    This command will prompt you to enter the password, and then you can edit the file using a text editor.
+
+Now, you have an already encrypted file (my_secret.txt.vault) that contains your sensitive data. You can use Ansible to work
+ with this encrypted file in your playbooks or roles.
+
+To use the encrypted file in an Ansible playbook, you can reference it like any other file, but Ansible will automatically 
+decrypt it for you when needed. Here's an example of how you might use it in a playbook:
+
+yaml
+
+---
+- name: Example Playbook
+  hosts: your_target_host
+  tasks:
+    - name: Copy the encrypted file to the target host
+      copy:
+        src: /path/to/my_secret.txt.vault
+        dest: /path/on/target/host/my_secret.txt.vault
+
+Ansible will handle decryption when necessary to use the content of the encrypted file in your playbook tasks.
+
+Remember to keep your password secure, as it's required to decrypt the file. If you need to automate decryption, you can 
+use Ansible Vault's automation features to provide the password in a secure manner, such as using an encrypted file or 
+an external credential store.
+
+write and Ansible code 
+
+---
+- name: Install Nginx
+  hosts: staging-webserver
+  vars:
+    server_port: 8080
+  tasks:
+    - name: Install Nginx
+      template: ...
+      notify:
+        - restart nginx
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+    Variables Declaration:
+        Your provided code includes a vars section where you define a variable named server_port with a value of 8080. 
+This variable can be used within the playbook to customize configurations. My original example did not include variable
+ declarations, but you can add variables as needed.
+
+    Template Task:
+        Your code includes a template task (which seems to be truncated with ...) that is responsible for some template-based
+ configuration. In my original example, I focused on the simple task of installing Nginx. Including a template task indicates
+ that you are likely customizing Nginx configuration using a template file.
+
+    Notify and Handlers:
+        Your code includes a notify directive in the task, specifying that it should notify the handler named "restart nginx" 
+when the task runs. In the handlers section, you define a handler to restart the Nginx service.
+        In my original example, I kept the playbook simple and did not include handler definitions. Handlers are used for tasks
+ that should be triggered when other tasks notify them. In your code, the "restart nginx" handler is triggered when the template
+ task notifies it.
+
+    Service Restart:
+        In your code, the "restart nginx" handler utilizes the service module to restart the Nginx service. This is a common
+ approach to ensure the Nginx service is restarted after a configuration change.
+        In my original example, I did not include a service restart as it was a basic installation task. Your code includes
+ the restart task as part of the handler.
+
+In summary, your provided code is more complex and tailored for a scenario where you want to install Nginx, use a template
+ for configuration, and ensure the Nginx service is restarted after configuration changes. It also introduces the use of variables
+ and handlers, which are advanced Ansible features for managing configuration and services effectively. The choice between
+ the two examples depends on your specific requirements and the level of customization you need for your Nginx installation.
+
